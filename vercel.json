@@ -1,9 +1,4 @@
 {
-  "name": "note-kamar",
   "version": 2,
-  "public": true,
-  "buildCommand": "",
-  "devCommand": "",
-  "outputDirectory": ".",
-  "framework": "static"
+  "public": true
 }

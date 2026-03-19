@@ -1,8 +1,6 @@
 // Variables globales
 const noteInputs = document.querySelectorAll('.note-input');
-const calculateBtn = document.getElementById('calculateBtn');
 const printBtn = document.getElementById('printBtn');
-const averageDisplay = document.getElementById('average');
 const resultBanner = document.getElementById('resultBanner');
 const resultStatus = document.getElementById('resultStatus');
 
@@ -12,13 +10,10 @@ const modules = [
     'M02: Droit social',
     'M03: Droit pénal spécial',
     'M04: Finances publiques',
-    'M05: L\'action administrative',
     'M06: Langue étrangère (français)',
     'M07: Responsabilité civile'
 ];
 
-// Événement au clic du bouton Calculer
-calculateBtn.addEventListener('click', calculerMoyenne);
 
 // Événement pour le bouton Imprimer
 printBtn.addEventListener('click', imprimerReclamation);
@@ -31,10 +26,10 @@ noteInputs.forEach(input => {
         let value = input.value;
         if (value !== '' && value !== '-') {
             if (isNaN(value) || value < 0 || value > 20) {
-                input.style.borderColor = '#f44336';
+                input.style.borderBottomColor = '#f44336';
                 input.title = 'Veuillez entrer une note entre 0 et 20';
             } else {
-                input.style.borderColor = '#ddd';
+                input.style.borderBottomColor = '#e0e0e0';
                 input.title = '';
             }
         }
@@ -67,30 +62,25 @@ function calculerMoyenne() {
 
     // Afficher la moyenne
     if (notesOrdinaires.length === 0) {
-        averageDisplay.textContent = '-';
-        averageDisplay.style.color = '#87CEEB';
-        resultStatus.textContent = 'En attente';
+        resultStatus.textContent = '--';
         resultBanner.className = 'result-banner';
     } else {
-        averageDisplay.textContent = moyenne;
         
         // Déterminer le statut (Admis/Ajourné)
         const admis = moyenne >= 10;
         
         if (admis) {
-            averageDisplay.style.color = '#4CAF50';
-            resultStatus.textContent = '✓ ADMIS';
+            resultStatus.textContent = 'ADMIS';
             resultBanner.className = 'result-banner admis';
         } else {
-            averageDisplay.style.color = '#f44336';
-            resultStatus.textContent = '✗ AJOURNÉ';
+            resultStatus.textContent = 'AJOURNÉ';
             resultBanner.className = 'result-banner ajourn';
         }
 
         // Animation légère
-        averageDisplay.style.animation = 'pulse 0.6s ease';
+        resultStatus.style.animation = 'pulse 0.6s ease';
         setTimeout(() => {
-            averageDisplay.style.animation = 'none';
+            resultStatus.style.animation = 'none';
         }, 600);
     }
 }
