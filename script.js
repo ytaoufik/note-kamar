@@ -37,10 +37,6 @@ function closeAuthOverlay() {
 }
 
 function saveNotes() {
-    if (!editMode) {
-        return;
-    }
-
     const notes = {};
     noteInputs.forEach((input) => {
         notes[input.dataset.module] = input.value;
@@ -128,6 +124,7 @@ loginBtn.addEventListener('click', () => {
 
     if (name === LOGIN_NAME && password === LOGIN_PASSWORD) {
         applyMode(true);
+        loadNotes();
         showAuthMessage('Accès autorisé : modification activée.', 'success');
         setTimeout(closeAuthOverlay, 450);
         return;
@@ -140,11 +137,23 @@ loginBtn.addEventListener('click', () => {
 
 viewOnlyBtn.addEventListener('click', () => {
     applyMode(false);
+    loadNotes();
+    calculerMoyenne();
     closeAuthOverlay();
 });
 
 noteInputs.forEach((input) => {
     input.addEventListener('input', () => {
+        if (!editMode) {
+            return;
+        }
+
+        sanitizeNoteInput(input);
+        calculerMoyenne();
+        saveNotes();
+    });
+
+    input.addEventListener('change', () => {
         if (!editMode) {
             return;
         }
@@ -181,4 +190,8 @@ window.addEventListener('load', () => {
     loadNotes();
     applyMode(false);
     calculerMoyenne();
+});
+
+window.addEventListener('beforeunload', () => {
+    saveNotes();
 });
