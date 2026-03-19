@@ -1,0 +1,370 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Roboto', 'Arial', sans-serif;
+    background-color: #f5f5f5;
+    color: #333;
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+    background-color: white;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+/* Bandeau bleu en haut */
+.header-banner {
+    background: linear-gradient(135deg, #87CEEB 0%, #87CEEB 100%);
+    color: white;
+    padding: 25px;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.header-banner h1 {
+    font-size: 24px;
+    font-weight: 600;
+    letter-spacing: 1px;
+}
+
+/* Contenu principal */
+.main-content {
+    padding: 30px;
+}
+
+.main-content h2 {
+    color: #333;
+    font-size: 20px;
+    margin-bottom: 25px;
+    font-weight: 600;
+}
+
+/* Reste du CSS pour le tableau */
+.table-wrapper {
+    margin-bottom: 25px;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.notes-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: white;
+}
+
+/* En-tête du tableau */
+.header-row {
+    background-color: #d9d9d9;
+}
+
+.header-row th {
+    padding: 15px;
+    text-align: left;
+    font-weight: 600;
+    color: #333;
+    font-size: 14px;
+    border-bottom: 2px solid #bbb;
+}
+
+.header-row th:nth-child(2),
+.header-row th:nth-child(3) {
+    text-align: center;
+}
+
+/* Lignes de données */
+.data-row {
+    border-bottom: 1px solid #e0e0e0;
+    transition: background-color 0.3s ease;
+}
+
+.data-row:hover {
+    background-color: #f9f9f9;
+}
+
+.data-row:last-child {
+    border-bottom: none;
+}
+
+/* Cellules de données */
+.data-row td {
+    padding: 15px;
+    color: #333;
+    font-size: 14px;
+}
+
+.module-label {
+    font-weight: 500;
+    color: #333;
+    width: 40%;
+}
+
+.input-cell {
+    text-align: center;
+    width: 30%;
+}
+
+/* Champs d'input */
+.note-input {
+    width: 80%;
+    max-width: 100px;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    text-align: center;
+    font-family: 'Roboto', 'Arial', sans-serif;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.note-input:focus {
+    outline: none;
+    border-color: #87CEEB;
+    box-shadow: 0 0 5px rgba(135, 206, 235, 0.5);
+}
+
+.note-input::placeholder {
+    color: #999;
+}
+
+/* Conteneur de boutons */
+.button-container {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 25px;
+    flex-wrap: wrap;
+}
+
+.btn-calculate,
+.btn-print {
+    padding: 12px 30px;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: 'Roboto', 'Arial', sans-serif;
+}
+
+.btn-calculate {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.btn-calculate:hover {
+    background-color: #45a049;
+    box-shadow: 0 4px 8px rgba(76, 175, 80, 0.3);
+}
+
+.btn-print {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.btn-print:hover {
+    background-color: #45a049;
+    box-shadow: 0 4px 8px rgba(76, 175, 80, 0.3);
+}
+
+/* Section des résultats */
+.results-section {
+    margin-bottom: 20px;
+    padding: 15px;
+    background-color: #f9f9f9;
+    border-radius: 6px;
+}
+
+.average-box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    font-size: 16px;
+}
+
+.label-average {
+    font-weight: 600;
+    color: #333;
+}
+
+.value-average {
+    font-size: 20px;
+    font-weight: bold;
+    color: #87CEEB;
+    min-width: 50px;
+    text-align: right;
+}
+
+/* Bande orange - Résultat de semestre */
+.result-banner {
+    background: linear-gradient(135deg, #FF9800 0%, #FF9800 100%);
+    color: white;
+    padding: 20px;
+    text-align: center;
+    border-radius: 6px;
+    margin-top: 20px;
+}
+
+.result-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    font-size: 16px;
+}
+
+.result-label {
+    font-weight: 600;
+}
+
+.result-status {
+    font-size: 18px;
+    font-weight: bold;
+    padding: 5px 15px;
+    border-radius: 4px;
+    background-color: rgba(255, 255, 255, 0.3);
+}
+
+/* Dynamique - Admis (vert) */
+.result-banner.admis {
+    background: linear-gradient(135deg, #4CAF50 0%, #4CAF50 100%);
+}
+
+.result-banner.admis .result-status {
+    background-color: rgba(255, 255, 255, 0.3);
+}
+
+/* Dynamique - Ajourné (rouge) */
+.result-banner.ajourn {
+    background: linear-gradient(135deg, #f44336 0%, #f44336 100%);
+}
+
+.result-banner.ajourn .result-status {
+    background-color: rgba(255, 255, 255, 0.3);
+}
+
+/* Responsive - Mobile */
+@media (max-width: 768px) {
+    .container {
+        margin: 10px;
+    }
+
+    .main-content {
+        padding: 20px;
+    }
+
+    .header-banner h1 {
+        font-size: 18px;
+    }
+
+    .main-content h2 {
+        font-size: 16px;
+    }
+
+    .table-wrapper {
+        overflow-x: auto;
+    }
+
+    .data-row td {
+        padding: 10px;
+        font-size: 12px;
+    }
+
+    .header-row th {
+        padding: 10px;
+        font-size: 12px;
+    }
+
+    .module-label {
+        width: auto;
+    }
+
+    .note-input {
+        width: 70%;
+    }
+
+    .button-container {
+        flex-direction: column;
+    }
+
+    .btn-calculate,
+    .btn-print {
+        width: 100%;
+    }
+
+    .average-box {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .result-content {
+        flex-direction: column;
+        gap: 8px;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        margin: 0;
+        border-radius: 0;
+    }
+
+    .main-content {
+        padding: 15px;
+    }
+
+    .header-banner {
+        padding: 20px;
+    }
+
+    .header-banner h1 {
+        font-size: 16px;
+    }
+
+    .main-content h2 {
+        font-size: 14px;
+        margin-bottom: 15px;
+    }
+
+    .data-row td {
+        padding: 8px;
+        font-size: 11px;
+    }
+
+    .header-row th {
+        padding: 8px;
+        font-size: 11px;
+    }
+
+    .note-input {
+        width: 60%;
+        padding: 6px 8px;
+        font-size: 12px;
+    }
+
+    .btn-calculate,
+    .btn-print {
+        padding: 10px 20px;
+        font-size: 12px;
+    }
+
+    .value-average {
+        font-size: 18px;
+    }
+
+    .result-content {
+        font-size: 14px;
+    }
+
+    .result-status {
+        font-size: 16px;
+    }
+}

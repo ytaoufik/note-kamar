@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relevé de Notes - Semestre 3</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Bandeau en haut -->
+        <div class="header-banner">
+            <h1>SEMESTRE 3 | TRONC COMMUN</h1>
+        </div>
+
+        <!-- Contenu principal -->
+        <div class="main-content">
+            <h2>Relevé de Notes Universitaire</h2>
+            
+            <!-- Tableau des modules -->
+            <div class="table-wrapper">
+                <table class="notes-table">
+                    <thead>
+                        <tr class="header-row">
+                            <th>Module</th>
+                            <th>Ordinaire</th>
+                            <th>Rattrapage</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="data-row">
+                            <td class="module-label">M01: Droit de la famille</td>
+                            <td class="input-cell">
+                                <input type="number" class="note-input" min="0" max="20" placeholder="0-20" data-module="M01">
+                            </td>
+                            <td class="input-cell">
+                                <input type="number" class="note-input" min="0" max="20" placeholder="0-20" data-module="M01-rattrapage">
+                            </td>
+                        </tr>
+                        <tr class="data-row">
+                            <td class="module-label">M02: Droit social</td>
+                            <td class="input-cell">
+                                <input type="number" class="note-input" min="0" max="20" placeholder="0-20" data-module="M02">
+                            </td>
+                            <td class="input-cell">
+                                <input type="number" class="note-input" min="0" max="20" placeholder="0-20" data-module="M02-rattrapage">
+                            </td>
+                        </tr>
+                        <tr class="data-row">
+                            <td class="module-label">M03: Droit pénal spécial</td>
+                            <td class="input-cell">
+                                <input type="number" class="note-input" min="0" max="20" placeholder="0-20" data-module="M03">
+                            </td>
+                            <td class="input-cell">
+                                <input type="number" class="note-input" min="0" max="20" placeholder="0-20" data-module="M03-rattrapage">
+                            </td>
+                        </tr>
+                        <tr class="data-row">
+                            <td class="module-label">M04: Finances publiques</td>
+                            <td class="input-cell">
+                                <input type="number" class="note-input" min="0" max="20" placeholder="0-20" data-module="M04">
+                            </td>
+                            <td class="input-cell">
+                                <input type="number" class="note-input" min="0" max="20" placeholder="0-20" data-module="M04-rattrapage">
+                            </td>
+                        </tr>
+                        <tr class="data-row">
+                            <td class="module-label">M05: L'action administrative</td>
+                            <td class="input-cell">
+                                <input type="number" class="note-input" min="0" max="20" placeholder="0-20" data-module="M05">
+                            </td>
+                            <td class="input-cell">
+                                <input type="number" class="note-input" min="0" max="20" placeholder="0-20" data-module="M05-rattrapage">
+                            </td>
+                        </tr>
+                        <tr class="data-row">
+                            <td class="module-label">M06: Langue étrangère (français)</td>
+                            <td class="input-cell">
+                                <input type="number" class="note-input" min="0" max="20" placeholder="0-20" data-module="M06">
+                            </td>
+                            <td class="input-cell">
+                                <input type="number" class="note-input" min="0" max="20" placeholder="0-20" data-module="M06-rattrapage">
+                            </td>
+                        </tr>
+                        <tr class="data-row">
+                            <td class="module-label">M07: Responsabilité civile</td>
+                            <td class="input-cell">
+                                <input type="number" class="note-input" min="0" max="20" placeholder="0-20" data-module="M07">
+                            </td>
+                            <td class="input-cell">
+                                <input type="number" class="note-input" min="0" max="20" placeholder="0-20" data-module="M07-rattrapage">
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Bouton Calculer -->
+            <div class="button-container">
+                <button id="calculateBtn" class="btn-calculate">Calculer la moyenne</button>
+                <button id="printBtn" class="btn-print">Imprimer réclamation</button>
+            </div>
+
+            <!-- Affichage de la moyenne et du résultat -->
+            <div class="results-section">
+                <div class="average-box">
+                    <span class="label-average">Moyenne de semestre:</span>
+                    <span id="average" class="value-average">-</span>
+                </div>
+            </div>
+
+            <!-- Bande orange - Résultat de semestre -->
+            <div id="resultBanner" class="result-banner">
+                <div class="result-content">
+                    <span class="result-label">Résultat de semestre:</span>
+                    <span id="resultStatus" class="result-status">En attente</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
