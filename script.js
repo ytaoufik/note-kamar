@@ -11,9 +11,11 @@ const authMessage = document.getElementById('authMessage');
 
 const LOGIN_NAME = 'kamar';
 const LOGIN_PASSWORD = 'notedekamar';
-const STORAGE_KEY = 'kamar-notes-v1';
+const LOCAL_FALLBACK_KEY = 'kamar-notes-local-fallback-v1';
 
 let editMode = false;
+let saveTimer = null;
+let latestCloudState = {};
 
 function applyMode(canEdit) {
     editMode = canEdit;
@@ -36,32 +38,134 @@ function closeAuthOverlay() {
     authOverlay.classList.add('hidden');
 }
 
-function saveNotes() {
+function collectNotesFromInputs() {
     const notes = {};
     noteInputs.forEach((input) => {
-        notes[input.dataset.module] = input.value;
+        notes[input.dataset.module] = input.value || '';
     });
-
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(notes));
+    return notes;
 }
 
-function loadNotes() {
-    const raw = localStorage.getItem(STORAGE_KEY);
+function applyNotesToInputs(notes) {
+    noteInputs.forEach((input) => {
+        const value = notes[input.dataset.module];
+        input.value = value === undefined || value === null ? '' : String(value);
+    });
+}
+
+function saveLocalFallback(notes) {
+    localStorage.setItem(LOCAL_FALLBACK_KEY, JSON.stringify(notes));
+}
+
+function loadLocalFallback() {
+    const raw = localStorage.getItem(LOCAL_FALLBACK_KEY);
     if (!raw) {
-        return;
+        return {};
     }
 
     try {
-        const notes = JSON.parse(raw);
-        noteInputs.forEach((input) => {
-            const value = notes[input.dataset.module];
-            if (value !== undefined && value !== null) {
-                input.value = value;
-            }
-        });
-    } catch (error) {
-        localStorage.removeItem(STORAGE_KEY);
+        const parsed = JSON.parse(raw);
+        return parsed && typeof parsed === 'object' ? parsed : {};
+    } catch (_) {
+        localStorage.removeItem(LOCAL_FALLBACK_KEY);
+        return {};
     }
+}
+
+async function fetchCloudNotes() {
+    const response = await fetch('/api/notes', {
+        method: 'GET',
+        cache: 'no-store',
+        headers: {
+            'Accept': 'application/json'
+        }
+    });
+
+    if (!response.ok) {
+        throw new Error('Impossible de lire les notes cloud.');
+    }
+
+    const data = await response.json();
+    return data.notes && typeof data.notes === 'object' ? data.notes : {};
+}
+
+async function saveCloudNotes(notes) {
+    const response = await fetch('/api/notes', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ notes })
+    });
+
+    if (!response.ok) {
+        throw new Error('Impossible d\'enregistrer les notes cloud.');
+    }
+}
+
+async function loadNotesPreferCloud() {
+    try {
+        const notes = await fetchCloudNotes();
+        latestCloudState = notes;
+        applyNotesToInputs(notes);
+        saveLocalFallback(notes);
+        return;
+    } catch (_) {
+        const fallback = loadLocalFallback();
+        applyNotesToInputs(fallback);
+    }
+}
+
+async function syncNotesNow() {
+    if (!editMode) {
+        return;
+    }
+
+    const notes = collectNotesFromInputs();
+    saveLocalFallback(notes);
+
+    try {
+        await saveCloudNotes(notes);
+        latestCloudState = notes;
+    } catch (_) {
+        showAuthMessage('Connexion faible: sauvegarde locale appliquée.', 'error');
+    }
+}
+
+function queueCloudSave() {
+    if (!editMode) {
+        return;
+    }
+
+    if (saveTimer) {
+        clearTimeout(saveTimer);
+    }
+
+    saveTimer = setTimeout(() => {
+        syncNotesNow();
+    }, 450);
+}
+
+function sanitizeNoteInput(input) {
+    if (input.value === '') {
+        return;
+    }
+
+    let value = Number.parseFloat(input.value);
+    if (Number.isNaN(value)) {
+        input.value = '';
+        return;
+    }
+
+    if (value < 0) {
+        value = 0;
+    }
+
+    if (value > 20) {
+        value = 20;
+    }
+
+    input.value = Number.isInteger(value) ? String(value) : value.toFixed(2);
 }
 
 function calculerMoyenne() {
@@ -92,52 +196,33 @@ function calculerMoyenne() {
     }
 }
 
-function sanitizeNoteInput(input) {
-    if (input.value === '') {
-        return;
-    }
-
-    let value = Number.parseFloat(input.value);
-    if (Number.isNaN(value)) {
-        input.value = '';
-        return;
-    }
-
-    if (value < 0) {
-        value = 0;
-    }
-
-    if (value > 20) {
-        value = 20;
-    }
-
-    input.value = Number.isInteger(value) ? String(value) : value.toFixed(2);
-}
-
 function imprimerReclamation() {
     window.print();
 }
 
-loginBtn.addEventListener('click', () => {
+loginBtn.addEventListener('click', async () => {
     const name = loginName.value.trim().toLowerCase();
     const password = loginPassword.value.trim();
 
     if (name === LOGIN_NAME && password === LOGIN_PASSWORD) {
+        await loadNotesPreferCloud();
         applyMode(true);
-        loadNotes();
-        showAuthMessage('Accès autorisé : modification activée.', 'success');
+        calculerMoyenne();
+        showAuthMessage('Accès autorisé : modification + synchro cloud activées.', 'success');
         setTimeout(closeAuthOverlay, 450);
         return;
     }
 
     applyMode(false);
+    await loadNotesPreferCloud();
+    calculerMoyenne();
     showAuthMessage('Identifiants incorrects : mode lecture seule.', 'error');
     setTimeout(closeAuthOverlay, 750);
 });
 
-viewOnlyBtn.addEventListener('click', () => {
+viewOnlyBtn.addEventListener('click', async () => {
     applyMode(false);
-    loadNotes();
+    await loadNotesPreferCloud();
     calculerMoyenne();
     closeAuthOverlay();
 });
@@ -150,7 +235,7 @@ noteInputs.forEach((input) => {
 
         sanitizeNoteInput(input);
         calculerMoyenne();
-        saveNotes();
+        queueCloudSave();
     });
 
     input.addEventListener('change', () => {
@@ -160,7 +245,7 @@ noteInputs.forEach((input) => {
 
         sanitizeNoteInput(input);
         calculerMoyenne();
-        saveNotes();
+        queueCloudSave();
     });
 
     input.addEventListener('blur', () => {
@@ -170,7 +255,7 @@ noteInputs.forEach((input) => {
 
         sanitizeNoteInput(input);
         calculerMoyenne();
-        saveNotes();
+        queueCloudSave();
     });
 });
 
@@ -186,12 +271,15 @@ window.addEventListener('keydown', (event) => {
     }
 });
 
-window.addEventListener('load', () => {
-    loadNotes();
-    applyMode(false);
-    calculerMoyenne();
+window.addEventListener('beforeunload', () => {
+    if (editMode) {
+        const notes = collectNotesFromInputs();
+        saveLocalFallback(notes);
+    }
 });
 
-window.addEventListener('beforeunload', () => {
-    saveNotes();
+window.addEventListener('load', async () => {
+    applyMode(false);
+    await loadNotesPreferCloud();
+    calculerMoyenne();
 });
