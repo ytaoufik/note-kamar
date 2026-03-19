@@ -7,6 +7,26 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <div id="authOverlay" class="auth-overlay">
+        <div class="auth-card">
+            <h2>Accès au relevé</h2>
+            <p>Seul l'utilisateur autorisé peut modifier les notes.</p>
+            <div class="auth-field">
+                <label for="loginName">Nom</label>
+                <input id="loginName" type="text" placeholder="Nom d'utilisateur">
+            </div>
+            <div class="auth-field">
+                <label for="loginPassword">Mot de passe</label>
+                <input id="loginPassword" type="password" placeholder="Mot de passe">
+            </div>
+            <div class="auth-actions">
+                <button id="loginBtn" class="btn-auth-primary">Entrer</button>
+                <button id="viewOnlyBtn" class="btn-auth-secondary">Lecture seule</button>
+            </div>
+            <p id="authMessage" class="auth-message"></p>
+        </div>
+    </div>
+
     <div class="container">
         <!-- Bandeau en haut -->
         <div class="header-banner">
@@ -63,12 +83,14 @@
                                 <input type="number" class="note-input" min="0" max="20" placeholder="0-20" data-module="M04-rattrapage">
                             </td>
                         </tr>
-                        <tr class="data-row button-row">
+                        <tr class="data-row">
                             <td class="module-label">M05: L'action administrative</td>
-                            <td class="input-cell button-cell">
-                                <button id="printBtn" class="btn-print">Imprimer réclamation</button>
+                            <td class="input-cell">
+                                <input type="number" class="note-input" min="0" max="20" placeholder="0-20" data-module="M05">
                             </td>
-                            <td class="input-cell">--</td>
+                            <td class="input-cell">
+                                <input type="number" class="note-input" min="0" max="20" placeholder="0-20" data-module="M05-rattrapage">
+                            </td>
                         </tr>
                         <tr class="data-row">
                             <td class="module-label">M06: Langue étrangère (français)</td>
@@ -92,6 +114,9 @@
                 </table>
             </div>
 
+            <div class="button-container">
+                <button id="printBtn" class="btn-print">Imprimer réclamation</button>
+            </div>
 
             <!-- Bande orange - Résultat de semestre -->
             <div id="resultBanner" class="result-banner">
