@@ -20,15 +20,15 @@ body {
 }
 
 .header-banner {
-    background: #bfefff;
-    color: #0f6f75;
-    text-align: center;
-    padding: 24px 16px;
+    background: #b7e6f4;
+    color: #0d6f74;
+    text-align: left;
+    padding: 18px 34px;
 }
 
 .header-banner h1 {
-    font-size: 38px;
-    letter-spacing: 2px;
+    font-size: 24px;
+    letter-spacing: 1px;
     font-weight: 700;
 }
 
@@ -290,8 +290,13 @@ body {
         padding: 8px;
     }
 
+    .header-banner {
+        padding: 14px 16px;
+    }
+
     .header-banner h1 {
-        font-size: 28px;
+        font-size: 16px;
+        letter-spacing: 0.4px;
     }
 
     .header-row th {
